@@ -19,9 +19,22 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
+import User from 'App/Models/User'
 
 Route.get('/', async () => {
   return { hello: 'world' }
 })
-//generating api token
-Route.post('/login', 'AuthController.login')
+
+//public routes
+Route.group(() => {
+  //generating api token
+  Route.post('/login', 'AuthController.login')
+}).prefix('/ecommerce')
+
+//private routes
+Route.group(() => {
+  Route.get('users', async () => {
+    const user = User.all()
+    return user
+  })
+}).middleware('auth')
