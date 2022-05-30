@@ -19,7 +19,6 @@
 */
 
 import Route from '@ioc:Adonis/Core/Route'
-import User from 'App/Models/User'
 
 Route.get('/', async () => {
   return { hello: 'world' }
@@ -33,8 +32,10 @@ Route.group(() => {
 
 //private routes
 Route.group(() => {
-  Route.get('users', async () => {
-    const user = User.all()
-    return user
+  Route.resource('/users', 'UsersController').middleware({
+    index: ['auth'],
+    show: ['auth'],
+    update: ['auth'],
+    destroy: ['auth'],
   })
-}).middleware('auth')
+}).prefix('/ecommerce')
